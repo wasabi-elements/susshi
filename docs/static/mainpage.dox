@@ -1,0 +1,14 @@
+/**
+
+@mainpage
+
+Welcome to the suSSHi2 developer documentation.
+<br/>
+You can find doxygen generated documentation of the suSSHi code on the \htmlonly<a href="topics.html"><b>Topics</b></a>\endhtmlonly page.
+
+Table of contents:
+
+  - \htmlonly<a href="topics.html"><b>suSSHi - Code Documentation & References</b></a>\endhtmlonly
+
+*/
+

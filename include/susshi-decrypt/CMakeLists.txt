@@ -1,0 +1,1 @@
+project(susshi-decrypt C)

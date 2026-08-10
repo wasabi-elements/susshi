@@ -1,0 +1,7 @@
+#!/bin/sh
+# Demo hook: gateway-stop
+# Available context: gateway identity only (no session)
+echo "gateway-stop fired"
+echo "  SUSSHI_VERSION          = ${SUSSHI_VERSION}"
+echo "  SUSSHI_GATEWAY_HOSTNAME = ${SUSSHI_GATEWAY_HOSTNAME}"
+echo "  LANG                    = ${LANG}"

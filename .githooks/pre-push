@@ -1,0 +1,16 @@
+#!/bin/sh
+#
+# pre-push — only main/develop and public version tags may go to the public remote
+#
+
+[ "$1" = "github-public" ] || exit 0
+
+while read -r _ _ remote_ref _; do
+  case "$remote_ref" in
+    refs/heads/main|refs/heads/develop) ;;
+    refs/tags/v[0-9][0-9].*) ;;
+    "") ;;
+    refs/tags/*) echo "Push blocked: tag ${remote_ref#refs/tags/} is not a public version tag (v##.*)." >&2; exit 1 ;;
+    *) echo "Push blocked: only (public-)main/(public-)develop may be pushed to public." >&2; exit 1 ;;
+  esac
+done

@@ -1,0 +1,9 @@
+#!/bin/sh
+# Demo hook: gateway-start
+# Available context: gateway identity only (no session yet)
+echo "gateway-start fired"
+echo "  SUSSHI_VERSION          = ${SUSSHI_VERSION}"
+echo "  SUSSHI_GATEWAY_HOSTNAME = ${SUSSHI_GATEWAY_HOSTNAME}"
+echo "  LANG                    = ${LANG}"
+sleep 5
+echo "gateway-start hook took 5 seconds" >&2

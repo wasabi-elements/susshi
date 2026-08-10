@@ -1,0 +1,16 @@
+#!/bin/sh
+#
+# pre-commit — keep .publicignore paths out of the public branches
+#
+
+case "$(git symbolic-ref --short -q HEAD)" in
+  public-main|public-develop) ;;
+  *) exit 0 ;;
+esac
+
+bad=$(git ls-files -c -i -X .publicignore)
+[ -z "$bad" ] && exit 0
+
+echo "Commit blocked: these paths are in .publicignore and must not go public:" >&2
+echo "$bad" | sed 's/^/  /' >&2
+exit 1

@@ -1,0 +1,13 @@
+*.la
+*.lo
+*.o
+*.a
+.idea/
+.devcontainer/
+.AppleDouble
+.DS_Store
+/build/**
+local/
+config/
+!config/susshid_example.json
+log/*

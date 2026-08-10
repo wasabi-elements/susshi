@@ -1,0 +1,15 @@
+#!/bin/sh
+# Demo hook: session-failed
+# Available context: client identity and the username that was attempted
+echo "session-failed fired"
+echo "  SUSSHI_VERSION          = ${SUSSHI_VERSION}"
+echo "  SUSSHI_GATEWAY_MODE     = ${SUSSHI_GATEWAY_MODE}"
+echo "  SUSSHI_GATEWAY_HOSTNAME = ${SUSSHI_GATEWAY_HOSTNAME}"
+echo "  SUSSHI_UNIQID           = ${SUSSHI_UNIQID}"
+echo "  SUSSHI_USER             = ${SUSSHI_USER}"
+echo "  SUSSHI_CLIENT_IP        = ${SUSSHI_CLIENT_IP}"
+echo "  SUSSHI_CLIENT_PORT      = ${SUSSHI_CLIENT_PORT}"
+echo "  SUSSHI_BASTION          = ${SUSSHI_BASTION}"
+echo "  SUSSHI_TARGET_USER      = ${SUSSHI_TARGET_USER}"
+echo "  SUSSHI_TARGET_HOST      = ${SUSSHI_TARGET_HOST}"
+echo "  SUSSHI_TARGET_PORT      = ${SUSSHI_TARGET_PORT}"

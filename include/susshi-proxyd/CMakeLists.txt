@@ -1,0 +1,1 @@
+project(susshi-proxyd C)

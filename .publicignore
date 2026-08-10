@@ -1,0 +1,8 @@
+.dockerignore
+.gitlab/
+.gitlab-ci.yml
+bin/
+config/
+BUILD.md
+Dockerfile
+THIRD-PARTY-NOTICES.md

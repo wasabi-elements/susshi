@@ -1,0 +1,9 @@
+#!/bin/sh
+# Demo hook: client-connect
+# Available context: client identity (no target yet)
+echo "client-connect fired"
+echo "  SUSSHI_VERSION          = ${SUSSHI_VERSION}"
+echo "  SUSSHI_GATEWAY_HOSTNAME = ${SUSSHI_GATEWAY_HOSTNAME}"
+echo "  SUSSHI_UNIQID           = ${SUSSHI_UNIQID}"
+echo "  SUSSHI_CLIENT_IP        = ${SUSSHI_CLIENT_IP}"
+echo "  SUSSHI_CLIENT_PORT      = ${SUSSHI_CLIENT_PORT}"
