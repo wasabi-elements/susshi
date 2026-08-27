@@ -23,15 +23,19 @@ The suSSHi Suite consists of the following components:
 
 | Component | Role | Repository |
 | --- | --- | --- |
-| **suSSHi Gateway** (`susshid`) | The SSH gateway daemon. Central entry point between SSH clients and target servers, and the only component end users interact with. Ships with the `susshi-last`, `susshi-who` and `susshi-play` session utilities. | [susshi](https://github.com/wasabi-elements/susshi) |
+| **suSSHi Gateway** (`susshid`) | The SSH gateway daemon. Central entry point between SSH clients and target servers, and the only SSH endpoint clients connect to. Ships with the `susshi-last`, `susshi-who` and `susshi-play` session utilities. | [susshi](https://github.com/wasabi-elements/susshi) |
 | **suSSHi Chef** | Administration UI, REST API and policy decision point. Central user account, access and configuration management for the whole suite. | [susshi-chef](https://github.com/wasabi-elements/susshi-chef) |
 | **suSSHi Database** | PostgreSQL database holding all configuration, accounts and access rules. Not shipped with suSSHi; can run in any redundancy setup. | — |
-| **suSSHi Sous Chef** (optional) | Self-service portal that authenticates SSH users via OpenID Connect and lets them manage their own SSH public keys. | [susshi-sous-chef](https://github.com/wasabi-elements/susshi-sous-chef) |
-| **suSSHi Proxy** (`susshi-proxyd`) (optional) | Proxy component installed at the edge of a protected environment, acting as a single point of contact for targets inside it. | [susshi](https://github.com/wasabi-elements/susshi) |
+| **suSSHi Sous Chef** (optional) | Portal that authenticates SSH users against the organization's OpenID Connect identity provider and authorizes their pending SSH sessions in suSSHi Chef. Can additionally offer users a self-service page to manage their own SSH public keys. | [susshi-sous-chef](https://github.com/wasabi-elements/susshi-sous-chef) |
+| **suSSHi Proxy** (`susshi-proxyd`) (optional) | Proxy component installed at the edge of a protected environment, acting as a single point of contact for targets inside it. Open source and installed like any other component; routing a gateway connection through it requires a subscription. | [susshi](https://github.com/wasabi-elements/susshi) |
 
 ## Architecture
 
 ![Architecture](https://docs.susshi.io/_images/susshi_architecture.png)
+
+The SSH client connects to the suSSHi Gateway, the policy enforcement point and the only SSH entry point into the protected environment. For every session the gateway asks suSSHi Chef, the policy decision point, to authenticate and authorize the connection. That link — "Secure Internal Communication" (SIC) — also carries the configuration synchronization, the session reports and the system and session logs, and it lets suSSHi Chef reach the gateways for status gathering, host key scanning, configuration reloads and session dropping. Administrators and automation use suSSHi Chef through its web UI and REST API over HTTPS, and all configuration and access rules are persisted in the suSSHi Database. Once a session is authorized, the gateway opens a second, independent SSH connection to the target server.
+
+The diagram shows the base setup. suSSHi Sous Chef and suSSHi Proxy are optional and not part of it; the [architecture chapter](https://docs.susshi.io/architecture/index.html) of the online manual covers them, along with the full list of protocols and ports.
 
 ## Documentation
 
@@ -67,11 +71,11 @@ We aim to acknowledge reports within two business days and will keep you informe
 
 ## Enterprise Edition & Subscription
 
-suSSHi Gateway, suSSHi Proxy, the suSSHi Chef core and suSSHi Sous Chef are fully open source under the AGPL-3.0-or-later — fully transparent, and complete enough to run standalone without a subscription.
+suSSHi Gateway, suSSHi Proxy, the suSSHi Chef core and suSSHi Sous Chef are fully open source under the AGPL-3.0-or-later — fully transparent, and complete enough to run standalone without a subscription. suSSHi Proxy is open source so that it installs as easily as everything else; letting a gateway route a connection through it is an Enterprise feature.
 
-Beyond that, suSSHi Chef can load a separate, **proprietary Enterprise Edition** — a Rails engine that is **not** part of these repositories and is **not** licensed under the AGPL.
+Beyond that there is the **suSSHi Chef Enterprise Edition** — a separate, proprietary product. Its source is **not** part of these repositories and is **not** licensed under the AGPL.
 
-The Enterprise Edition and commercial support are **not sold separately**: a single suSSHi subscription covers both. It is issued per installation, valid for a fixed term, and unlocks the licensed features along with the user and target limits it was signed for.
+The Enterprise Edition and commercial support are **not sold separately**: a single suSSHi subscription covers both. The subscription is issued per installation, valid for a fixed term, and unlocks the licensed features along with the user and target limits it was signed for.
 
 **But production environments require more than code.** A subscription includes:
 
