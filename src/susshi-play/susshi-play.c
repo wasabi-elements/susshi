@@ -359,14 +359,17 @@ write_ttyrec_chunk(FILE *ttyrec, FILE *session, const char *session_filename, ui
 }
 
 
+#define DEFAULT_TERM_WIDTH  80  /* Fallback geometry if the timing file carries no terminal size */
+#define DEFAULT_TERM_HEIGHT 24
+
 /*!
  * @brief       Convert a session file into ttyrec format
  *
  * @param       session_file
  * @param       timing_file
  * @param       ttyrec_file
- * @param       width
- * @param       height
+ * @param       width       Largest terminal width seen in the session, or NULL
+ * @param       height      Largest terminal height seen in the session, or NULL
  *
  * @return      Timestamp
  */
@@ -387,7 +390,8 @@ convert_session_file_into_ttyrec(const char *session_file, const char *timing_fi
 	if ((session = fopen(session_file, "r"))) {
 		if ((timing = fopen(timing_file, "r"))) {
 			if ((ttyrec = fopen(ttyrec_file, "w"))) {
-				uint32_t w, h, wp, wh;
+				uint32_t w = 0, h = 0, wp, wh;
+				uint32_t max_w = 0, max_h = 0;
 				char *term = malloc(30);
 
 				/*
@@ -399,11 +403,8 @@ convert_session_file_into_ttyrec(const char *session_file, const char *timing_fi
 					total_len += len;
 					write_ttyrec_chunk(ttyrec, session, session_file, len, timestamp);
 
-					if (width != NULL)
-						*width = w;
-					if (height != NULL)
-						*height = h;
-
+					max_w = w;
+					max_h = h;
 				}
 
 				/*
@@ -414,12 +415,32 @@ convert_session_file_into_ttyrec(const char *session_file, const char *timing_fi
 					timestamp +=delta;
 					total_len += len;
 
+					/*
+					 * Only zero length records from client carry a terminal size instead of session data.
+					 */
+					if ((side == 'C') && (len == 0) && (sscanf(line, "%*c %*f %*d %dx%d", &w, &h) == 2)) {
+						if (w > max_w)
+							max_w = w;
+						if (h > max_h)
+							max_h = h;
+					}
+
 					if (side == 'S') {
 						write_ttyrec_chunk(ttyrec, session, session_file, len, timestamp);
 					}
 				}
 
-				verbose("\n    Info: Terminal %s %dx%d, Duration %f sec. %ld Characters.\n", term, w, h, timestamp, total_len);
+				if (max_w == 0)
+					max_w = DEFAULT_TERM_WIDTH;
+				if (max_h == 0)
+					max_h = DEFAULT_TERM_HEIGHT;
+
+				if (width != NULL)
+					*width = max_w;
+				if (height != NULL)
+					*height = max_h;
+
+				verbose("\n    Info: Terminal %s %dx%d, Duration %f sec. %ld Characters.\n", term, max_w, max_h, timestamp, total_len);
 				verbose(" Session: %s\n", session_file);
 				verbose("  Timing: %s\n", timing_file);
 
@@ -441,6 +462,8 @@ convert_session_file_into_ttyrec(const char *session_file, const char *timing_fi
 	return (timestamp);
 }
 
+#undef DEFAULT_TERM_WIDTH
+#undef DEFAULT_TERM_HEIGHT
 
 
 /*!
