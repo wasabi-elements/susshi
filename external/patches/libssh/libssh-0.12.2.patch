@@ -1,5 +1,42 @@
+diff --git a/include/libssh/buffer-struct.h b/include/libssh/buffer-struct.h
+new file mode 100644
+index 0000000..d7d351c
+--- /dev/null
++++ b/include/libssh/buffer-struct.h
+@@ -0,0 +1,11 @@
++/* suSSHi 2020-02-14: extracted from buffer.c so consumers can include the struct definition; Copyright (c) 2003-2013 by Aris Adamantiadis */
++#ifndef LIBSSH_BUFFER_STRUCT_H
++#define LIBSSH_BUFFER_STRUCT_H
++struct ssh_buffer_struct {
++    bool secure;
++    uint32_t used;
++    uint32_t allocated;
++    uint32_t pos;
++    uint8_t *data;
++};
++#endif /* LIBSSH_BUFFER_STRUCT_H */
+diff --git a/src/buffer.c b/src/buffer.c
+index 6011917..f26f656 100644
+--- a/src/buffer.c
++++ b/src/buffer.c
+@@ -45,13 +45,8 @@
+  * \_data points\_pos points here  \_used points here |    /
+  *   here                                          Allocated
+  */
+-struct ssh_buffer_struct {
+-    bool secure;
+-    uint32_t used;
+-    uint32_t allocated;
+-    uint32_t pos;
+-    uint8_t *data;
+-};
++/* suSSHi 2020-02-14: struct moved to include/libssh/buffer-struct.h */
++#include "libssh/buffer-struct.h"
+ 
+ /* Buffer size maximum is 256M */
+ #define BUFFER_SIZE_MAX 0x10000000
 diff --git a/src/client.c b/src/client.c
-index 0d01d373..5d74fb3b 100644
+index 0d01d37..e48ed4b 100644
 --- a/src/client.c
 +++ b/src/client.c
 @@ -216,9 +216,12 @@ int ssh_send_banner(ssh_session session, int server)
@@ -18,10 +55,10 @@ index 0d01d373..5d74fb3b 100644
  
          snprintf(buffer,
 diff --git a/src/messages.c b/src/messages.c
-index 824b2772..175588e5 100644
+index 5618798..3d4cc92 100644
 --- a/src/messages.c
 +++ b/src/messages.c
-@@ -1521,8 +1521,18 @@ int ssh_message_channel_request_open_reply_accept_channel(ssh_message msg,
+@@ -1549,8 +1549,18 @@ int ssh_message_channel_request_open_reply_accept_channel(ssh_message msg,
      session = msg->session;
  
      chan->local_channel = ssh_channel_new_id(session);
@@ -42,35 +79,3 @@ index 824b2772..175588e5 100644
      chan->remote_channel = msg->channel_request_open.sender;
      chan->remote_maxpacket = msg->channel_request_open.packet_size;
      chan->remote_window = msg->channel_request_open.window;
-diff --git a/include/libssh/buffer-struct.h b/include/libssh/buffer-struct.h
-new file mode 100644
---- /dev/null
-+++ b/include/libssh/buffer-struct.h
-@@ -0,0 +1,11 @@
-+/* suSSHi 2020-02-14: extracted from buffer.c so consumers can include the struct definition; Copyright (c) 2003-2013 by Aris Adamantiadis */
-+#ifndef LIBSSH_BUFFER_STRUCT_H
-+#define LIBSSH_BUFFER_STRUCT_H
-+struct ssh_buffer_struct {
-+    bool secure;
-+    uint32_t used;
-+    uint32_t allocated;
-+    uint32_t pos;
-+    uint8_t *data;
-+};
-+#endif /* LIBSSH_BUFFER_STRUCT_H */
-diff --git a/src/buffer.c b/src/buffer.c
---- a/src/buffer.c
-+++ b/src/buffer.c
-@@ -47,10 +47,5 @@
-  */
--struct ssh_buffer_struct {
--    bool secure;
--    uint32_t used;
--    uint32_t allocated;
--    uint32_t pos;
--    uint8_t *data;
--};
-+/* suSSHi 2020-02-14: struct moved to include/libssh/buffer-struct.h */
-+#include "libssh/buffer-struct.h"
-
- /* Buffer size maximum is 256M */

@@ -1,6 +1,6 @@
 include(ExternalProject)
 
-set(LIBSSH_GIT_TAG "libssh-0.12.0")
+set(LIBSSH_GIT_TAG "libssh-0.12.2")
 
 # LibCURL version
 # Please refer to README.md for more details
@@ -48,14 +48,14 @@ ExternalProject_Add(
 
         CMAKE_ARGS "-DCMAKE_C_COMPILER=clang"
         CMAKE_ARGS "-DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/external"
-        CMAKE_ARGS "-DDEBUG_CALLTRACE=${LIBSSH_CALLTRACE}"
+        CMAKE_ARGS "-DWITH_DEBUG_CALLTRACE=${LIBSSH_CALLTRACE}"
         CMAKE_ARGS "-DWITH_PCAP=${LIBSSH_PCAP}"
         CMAKE_ARGS "-DWITH_EXAMPLES=OFF"
         CMAKE_ARGS "-DWITH_GSSAPI=OFF"
         CMAKE_ARGS "-DWITH_ZLIB=ON"
         CMAKE_ARGS "-DWITH_INTERNAL_DOC=OFF"
         CMAKE_ARGS "-DWITH_MBEDTLS=OFF"
-        CMAKE_ARGS "-DDEBUG_PACKET=OFF"
+        CMAKE_ARGS "-DWITH_DEBUG_PACKET=OFF"
         CMAKE_ARGS "-DBUILD_SHARED_LIBS=OFF"
 
         BUILD_COMMAND bash -c "make -j"
