@@ -611,8 +611,10 @@ susshi_client_auth_finish(bool successful) {
 				successful = true;
 			} else {
 
-				/* We are already in keyboard-interactive, so no partial authentication success message here */
-				if (strcmp(bdata(susshi_session.client_authmethod), "keyboard-interactive.") == 0) {
+				/* A keyboard-interactive exchange with the client is still open (also after publickey +
+				 * keyboard-interactive), so no partial authentication success message here: the target
+				 * authentication continues it with further INFO_REQUESTs (RFC 4256, section 3.4) */
+				if (susshi_session.client_message != NULL) {
 					return;
 				}
 
