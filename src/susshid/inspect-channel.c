@@ -1727,7 +1727,7 @@ susshi_inspect_channel_request_exec(Side sender, int channel_id,
 	if (*logtype != SCP) {
 
 		if ((susshi_chef_authz_acl_bool("SSHInteractive", true) == SUSSHI_ACL_ALLOW) ||
-			susshi_chef_authz_acl_regex("SSHCommandExecs", (char *) cmd, true) == SUSSHI_ACL_ALLOW) {
+			susshi_chef_authz_acl_regex("SSHCommandExecs", (char *) cmd) == SUSSHI_ACL_ALLOW) {
 			*logtext = bformat("Exec request '%s' accepted by ACL.", cmd);
 			response = OK;
 

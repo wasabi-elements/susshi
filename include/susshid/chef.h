@@ -106,7 +106,7 @@ bool susshi_chef_create_client_auth_cache(void);
 size_t susshi_chef_curlwritefn(void *contents, size_t size, size_t nmemb, void *userp);
 
 AclState susshi_chef_authz_acl_string(const char *attrib, const char *value);
-AclState susshi_chef_authz_acl_regex(const char *attrib, const char *value, bool first_match);
+AclState susshi_chef_authz_acl_regex(const char *attrib, const char *value);
 AclState susshi_chef_authz_acl_socket(const char *key, const char *host, u_int port);
 AclState susshi_chef_authz_acl_bool(const char *key, bool value);
 

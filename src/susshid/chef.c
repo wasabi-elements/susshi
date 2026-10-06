@@ -157,13 +157,12 @@ susshi_chef_authz_acl_string(const char *key, const char *cvalue) {
  *
  * @param       key             Lookup key
  * @param       cvalue          String value
- * @param       on_first_match  If set to true, abort after first check even if no match
  *
  * @return      AclState value
  */
 
 AclState
-susshi_chef_authz_acl_regex(const char *key, const char *cvalue, bool on_first_match) {
+susshi_chef_authz_acl_regex(const char *key, const char *cvalue) {
 	AclState ret = SUSSHI_ACL_DENY;
 	pcre2_code *re;
 	int errorcode;
@@ -181,8 +180,7 @@ susshi_chef_authz_acl_regex(const char *key, const char *cvalue, bool on_first_m
 
 					re = pcre2_compile((PCRE2_SPTR)json_string_value(element), PCRE2_ZERO_TERMINATED, 0, &errorcode, &erroffset, NULL);
 					if (re == NULL) {
-						if (on_first_match)
-							break;
+						/* PCRE compile failed */
 						continue;
 					}
 					{
@@ -191,10 +189,7 @@ susshi_chef_authz_acl_regex(const char *key, const char *cvalue, bool on_first_m
 						pcre2_match_data_free(md);
 					}
 					pcre2_code_free(re);
-					if (rc < 0) {
-						if (on_first_match)
-							break;
-					} else {
+					if (rc > 1) {
 						ret = SUSSHI_ACL_ALLOW;
 						break;
 					}
