@@ -189,7 +189,7 @@ susshi_chef_authz_acl_regex(const char *key, const char *cvalue) {
 						pcre2_match_data_free(md);
 					}
 					pcre2_code_free(re);
-					if (rc > 1) {
+					if (rc >= 0) {
 						ret = SUSSHI_ACL_ALLOW;
 						break;
 					}
